@@ -20,36 +20,59 @@ int main()
         getline(cin, expression);
 
         istringstream iss(expression);
-        int result = 0;
+        double result = 0;
         char op;
         iss >> result;
 
-        while (iss >> op) {
-            int operand;
-            iss >> operand;
+        if (iss.fail()) {
+            cout << "Error: Invalid expression." << endl;
+            return 1;
+        }
 
-            if (op == '+') {
-                result += operand;
-            } else if (op == '-') {
-                result -= operand;
-            } else if (op == '*') {
-                result *= operand;
-            } else if (op == '/') {
-                if (operand == 0) {
-                    cout << "Error: Division by zero is not allowed.";
+        while (iss >> op) {
+            double operand;
+            if (op == '^') {
+                int exponent;
+                if (!(iss >> exponent)) {
+                    cout << "Error: Invalid expression." << endl;
                     return 1;
                 }
-                result /= operand;
+                result = pow(result, exponent);
+            } else if (op == '#') {
+                result = sqrt(result);
+            } else if (op == '@') {
+                result = round(result);
+            } else if (op == '~') {
+                result = abs(result);
             } else {
-                cout << "Error: Invalid operator entered.";
-                return 1;
+                if (!(iss >> operand)) {
+                    cout << "Error: Invalid expression." << endl;
+                    return 1;
+                }
+
+                if (op == '+') {
+                    result += operand;
+                } else if (op == '-') {
+                    result -= operand;
+                } else if (op == '*') {
+                    result *= operand;
+                } else if (op == '/') {
+                    if (operand == 0) {
+                        cout << "Error: Division by zero is not allowed." << endl;
+                        return 1;
+                    }
+                    result /= operand;
+                } else {
+                    cout << "Error: Invalid operator entered." << endl;
+                    return 1;
+                }
             }
         }
 
         cout << "Result: " << result << endl;
         cout << "Do you want to continue (Y/N): ";
         cin >> ans;
-        cin.ignore();
+        cin.ignore(); 
     } while (ans == 'Y' || ans == 'y');
 
     return 0;
